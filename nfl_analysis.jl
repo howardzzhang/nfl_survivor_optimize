@@ -215,6 +215,7 @@ sol = ga_optimize(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix
 
 function single_length(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams)
    survival = zeros(nseasons,17);
+   exp_survival = zeros(nseasons,17);
    log_likelihood = zeros(nseasons,17);
    for potential_length = 1:17
       for season = 1:nseasons
@@ -236,8 +237,28 @@ function single_length(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_m
             deleteat!(remaining_teams_vec, temp .== 1);
             remaining_teams -= 1
          end
-         temp = vec(transpose(sum(sol .* win_outcomes_matrix,dims=1)));
          log_likelihood[season,potential_length] = sum(sol.*win_matrix_act);
+         temp_sol = sol.*win_matrix_act;
+         temp_sol[temp_sol.==0] .= -Inf
+         expected_p = sum(exp.(temp_sol),dims=1)';
+
+         nsimul = 10000;
+         survive_simul = zeros(nsimul);
+         for simul = 1:nsimul
+            outcome = rand(nweeks)
+            result = vec(Int64.(expected_p.>=outcome));
+            if isnothing(findfirst(result.==0))
+               terminal = nweeks
+            elseif isnothing(findnext(result.==0,findfirst(result.==0)+1))
+               terminal = nweeks
+            else
+               terminal = findnext(result.==0,findfirst(result.==0)+1)
+            end
+            survive_simul[simul] = terminal;
+         end
+         exp_survival[nseasons,potential_length] = mean(survive_simul);
+
+         temp = vec(transpose(sum(sol .* win_outcomes_matrix,dims=1)));
          if isnothing(findfirst(temp.==0))
             survival[season,potential_length] = nweeks
          elseif isnothing(findnext(temp.==0,findfirst(temp.==0)+1))
@@ -261,8 +282,17 @@ function single_length(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_m
    _,optimal_median_log_likelihood = findmax(median_log_likelihood[1:17]);
    display([optimal_mean_log_likelihood optimal_median_log_likelihood])
 
-   plot(1:17,transpose(mean_sol)[:], title = "Expected Survival Length (Two Lives)", xlabel="Look Forward")
+   mean_exp_sol = mean(exp_survival,dims=1)
+   median_exp_sol = median(exp_survival,dims=1)
+   display([mean_exp_sol median_exp_sol])
+   _,optimal_mean_exp_sol = findmax(mean_exp_sol);
+   _,optimal_median_exp_sol = findmax(median_exp_sol);
+   display([optimal_mean_exp_sol optimal_median_exp_sol])
+
+   plot(1:17,transpose(mean_sol)[:], title = "Realized Survival Length (Two Lives)", xlabel="Look Forward")
    savefig("constant_lookforward_survivalperiod.png")
+   plot(1:17,transpose(mean_exp_sol)[:], title = "Expected Survival Length (Two Lives)", xlabel="Look Forward")
+   savefig("constant_lookforward_expectedsurvivalperiod.png")
    plot(1:17,transpose(mean_log_likelihood)[:], title = "Expected log Likelihood", xlabel="Look Forward")
    savefig("constant_lookforward_loglikelihood.png")
 end

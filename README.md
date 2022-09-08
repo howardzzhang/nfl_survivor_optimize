@@ -19,7 +19,7 @@ Notice that $L=1$ corresponds to a greedy algorithm where the team with the high
 Packages used: JuMP with HiGHS
 
 ### nfl_analysis.jl
-How do we determine the optimal look forward periods $L$? Using historical data from 1990-2021 seasons (skipping 2020 Covid), I first consider a case where we choose a constant $L$ in each week. Similar to Bergman and Imbrogno (2017), I find that a 8-week algorithm performs best in terms of log-likelihood. However, a constant 9-period algorithm produces a similar expected survival time as a greedy algorithm!
+How do we determine the optimal look forward periods $L$? Using historical data from 1990-2021 seasons (skipping 2020 Covid), I first consider a case where we choose a constant $L$ in each week. Similar to Bergman and Imbrogno (2017), I find that a 8-week algorithm performs best in terms of log-likelihood. However, most of the strategies behave worse than a greedy algorithm in terms of realized survival times. A 9-period algorithm produces a similar realized survival time as a greedy algorithm! Is this a luck of the draw (with some early season upsets, or an issue with ELO at the beginning of the season?)
 
 Each week, I run a $L$ period look forward optimization problem (defined above). I then extract the optimal team for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. Crucially, the probabilities that enter the optimization problem are formed based only on the ELO available before the start of the current week.
 

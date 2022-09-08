@@ -1,4 +1,4 @@
-using JuMP, DataFrames, CSV, Dates, Statistics, Evolutionary, Random, HTTP
+using JuMP, DataFrames, CSV, Dates, Statistics, Evolutionary, Random, HTTP, Plots
 import HiGHS
 include("util.jl")
 
@@ -260,6 +260,11 @@ function single_length(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_m
    _,optimal_mean_log_likelihood = findmax(mean_log_likelihood[1:17]);
    _,optimal_median_log_likelihood = findmax(median_log_likelihood[1:17]);
    display([optimal_mean_log_likelihood optimal_median_log_likelihood])
+
+   plot(1:17,transpose(mean_sol)[:], title = "Expected Survival Length (Two Lives)", xlabel="Look Forward")
+   savefig("constant_lookforward_survivalperiod.png")
+   plot(1:17,transpose(mean_log_likelihood)[:], title = "Expected log Likelihood", xlabel="Look Forward")
+   savefig("constant_lookforward_loglikelihood.png")
 end
 
 function optimal_fullinfo(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams)

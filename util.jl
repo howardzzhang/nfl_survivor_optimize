@@ -1,7 +1,7 @@
 
 function solve_IP(nteams,nweeks,win_matrix,returntype)
    multi = Model(HiGHS.Optimizer)
-   set_optimizer_attribute(multi, "log_to_console", "false")
+   set_optimizer_attribute(multi, "log_to_console", false)
 
    # VARIABLES
    @variable(multi, pick[1:nteams,1:nweeks],Bin)

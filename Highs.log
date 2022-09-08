@@ -1,0 +1,41 @@
+
+Presolving model
+1 rows, 32 cols, 32 nonzeros
+1 rows, 4 cols, 4 nonzeros
+0 rows, 1 cols, 0 nonzeros
+0 rows, 0 cols, 0 nonzeros
+Presolve: Optimal
+
+Solving report
+  Status            Optimal
+  Primal bound      0.271425264681
+  Dual bound        0.271425264681
+  Solution status   feasible
+                    -0.271425264681 (objective)
+                    0 (bound viol.)
+                    0 (int. viol.)
+                    0 (row viol.)
+  Timing            0.00 (total)
+                    0.00 (presolve)
+                    0.00 (postsolve)
+  Nodes             0
+  LP iterations     0 (total)
+                    0 (strong br.)
+                    0 (separation)
+                    0 (heuristics)
+
+  Primal bound      3.0906720716
+  Dual bound        3.0906720716
+  Solution status   feasible
+                    -3.0906720716 (objective)
+                    0 (bound viol.)
+                    0 (int. viol.)
+                    0 (row viol.)
+  Timing            0.00 (total)
+                    0.00 (presolve)
+                    0.00 (postsolve)
+  Nodes             1
+  LP iterations     30 (total)
+                    0 (strong br.)
+                    0 (separation)
+                    0 (heuristics)

@@ -19,7 +19,7 @@ Notice that $L=1$ corresponds to a greedy algorithm where the team with the high
 Packages used: JuMP with HiGHS
 
 ### nfl_analysis.jl
-How do we determine the optimal look forward periods $L$? Using historical data from 1990-2021 seasons (skipping 2020 Covid), I first consider a case where we choose a constant $L$ in each week. Similar to Bergman and Imbrogno (2017), I find that a 8-week algorithm performs best in terms of log-likelihood. However, most of the strategies behave worse than a greedy algorithm in terms of realized survival times. A 9-period algorithm produces a similar realized survival time as a greedy algorithm! Is this a luck of the draw (with some early season upsets), or an issue with ELO at the beginning of the season?
+How do we determine the optimal look forward periods $L$? Using historical data from 1990-2021 seasons (skipping 2020 Covid), I first consider a case where we choose a constant $L$ in each week. Similar to Bergman and Imbrogno (2017), I find that a 8 week look forward algorithm performs best in terms of log-likelihood. In terms of expected survival time, I find that a 4 week look forward is the best. However, most of the strategies behave worse than a greedy algorithm in terms of realized survival times! A 9-period algorithm produces a similar realized survival time as a greedy algorithm. Is this a luck of the draw (with some early season upsets), or an issue with ELO at the beginning of the season?
 
 Each week, I run a $L$ period look forward optimization problem (defined above). I then extract the optimal team for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. Crucially, the probabilities that enter the optimization problem are formed based only on the ELO available before the start of the current week.
 
@@ -29,8 +29,10 @@ In contrast to the optimization problem that is solved each week, the updated pr
 
 ![constant_lookforward_loglikelihood](https://user-images.githubusercontent.com/57815640/189217027-1c3f2fb9-6dbd-4c26-a0fd-8513fd1d6186.png)
 
-In reality, one does not care about the likelihoods after two deaths (i.e., incorrect guesses). I also consider an alternative optimization which is my preferred, of actual survival time (with two lives) rather than the sum of log likelihoods. As seen, the optimal value of 9 produces a similar expected survival time as a greedy algorithm.
+One does not care about the likelihoods after two deaths (i.e., incorrect guesses). I consider an alternative optimization of the expected survival time. I find an optimal look-forward period of 4.
+![constant_lookforward_expectedsurvivalperiod](https://user-images.githubusercontent.com/57815640/189228402-b33e2962-2778-404e-89c0-df175de776f3.png)
 
+Finally, what about actual survival time? The optimal value of 9 produces a similar expected survival time as a greedy algorithm; while other strategies produce a lower realized survival time compared to a greedy algorithm!
 ![constant_lookforward_survivalperiod](https://user-images.githubusercontent.com/57815640/189217126-b559f83b-ee9e-4646-8c3b-5b5f228641ef.png)
 
 How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, for $w'=1,..,W-1$ (notice that if you survive until the last week $W$, the only available look forward period is 1 so we only need to choose the look forward window for $W-1$ weeks). The improvement looks to be decent (11.2 over 9.8 weeks), but the resulting choices look more like over-fitting (one trend seems to be a longer window in the first half of the season).

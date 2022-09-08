@@ -21,7 +21,7 @@ Packages used: JuMP with HiGHS
 ### nfl_analysis.jl
 How do we determine the optimal look forward periods $L$? Using historical data from 1990-2021 seasons (skipping 2020 Covid), I first consider a case where we choose a constant $L$ in each week. Similar to Bergman and Imbrogno (2017), I find that a 8-week algorithm performs best in terms of log-likelihood, but behaves similar to a greedy algorithm in terms of expected survival time. 
 
-Each week, I run a $L$ period look forward optimization problem (defined above). I then extract the pick for the current week only. In the subsequent week, I drop the pick selected in the previous week, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. Crucially, the probabilities that enter the optimization problem are formed based only on the ELO available before the start of the current week.
+Each week, I run a $L$ period look forward optimization problem (defined above). I then extract the optimal team for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. Crucially, the probabilities that enter the optimization problem are formed based only on the ELO available before the start of the current week.
 
 The log likelihood of a strategy is defined as
 $$\sum_{w=w'}^{w' + L-1} \sum_{t \in T_{w'}} x_{w,t}^* \log p_{w,w,t}$$ 

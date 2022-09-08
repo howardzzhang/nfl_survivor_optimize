@@ -24,7 +24,7 @@ How do we determine the optimal look forward periods $L$? Using historical data 
 Each week, I run a $L$ period look forward optimization problem (defined above). I then extract the optimal team for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. Crucially, the probabilities that enter the optimization problem are formed based only on the ELO available before the start of the current week.
 
 The log likelihood of a strategy is defined as
-$$\sum_{w=w'}^{w' + L-1} \sum_{t \in T_{w'}} x_{w,t}^* \log p_{w,w,t}$$ 
+$$\sum_{w=1}^{W} \sum_{t \in T_{w'}} x_{w,t}^* \log p_{w,w,t}$$ 
 In contrast to the optimization problem that is solved each week, the updated probabilities are used each week in the computation of the log likelihood. By this definition, the optimal strategy if one knew the full set of $p_{w,w,t}$ would be to run a 17 look forward period at week 1.
 
 ![constant_lookforward_loglikelihood](https://user-images.githubusercontent.com/57815640/189217027-1c3f2fb9-6dbd-4c26-a0fd-8513fd1d6186.png)

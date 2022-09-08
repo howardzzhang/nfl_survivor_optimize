@@ -33,7 +33,7 @@ In reality, one does not care about the likelihoods after two deaths (i.e., inco
 
 ![constant_lookforward_survivalperiod](https://user-images.githubusercontent.com/57815640/189217126-b559f83b-ee9e-4646-8c3b-5b5f228641ef.png)
 
-How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, for $w'=1,..,W-1$ (notice that if you survive until the last week $W$, the only available look forward period is 1. The improvement looks to be decent (11.2 over 9.8 weeks), but the resulting choices look more like over-fitting (one trend seems to be a longer window in the first half of the season).
+How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, for $w'=1,..,W-1$ (notice that if you survive until the last week $W$, the only available look forward period is 1 so we only need to choose the look forward window for $W-1$ weeks). The improvement looks to be decent (11.2 over 9.8 weeks), but the resulting choices look more like over-fitting (one trend seems to be a longer window in the first half of the season).
 
 Packages used: Evolutionary.jl, JuMP with HiGHS
 

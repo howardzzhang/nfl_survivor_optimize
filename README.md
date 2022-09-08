@@ -23,7 +23,9 @@ How do we determine the optimal look forward periods $L$? Using historical data 
 
 Each week, I run a $L$ period look forward optimization problem (defined above). I then extract the pick for the current week only. In the subsequent week, I drop the pick selected in the previous week, use updated elos and then re-run the optimization problem with the same $L$ period look forward period. Crucially, the probabilities that enter the optimization problem are formed only based on the ELO available before the start of the current week.
 
-On the other hand, the log likelihood of a strategy is defined as $\sum_{w=w'}^{w'+L-1} \sum_{t \in T_{w'}} x_{w,t}^* \log p_{w,w,t}$. In contrast to the optimization problem that I solve each week, the updated probabilities are used each week in the computation of the log likelihood. By this definition, the optimal strategy if one knew the full set of $ p_{w,w,t}$ would be to run a 17 look forward period at week 1.
+On the other hand, the log likelihood of a strategy is defined as
+$$\sum_{w=w'}^{w' + L-1} \sum_{t \in T_{w'}} x_{w,t}^* \log p_{w,w,t}$$ 
+In contrast to the optimization problem that I solve each week, the updated probabilities are used each week in the computation of the log likelihood. By this definition, the optimal strategy if one knew the full set of $ p_{w,w,t}$ would be to run a 17 look forward period at week 1.
 
 In reality, one does not care about the likelihoods after two deaths (i.e., incorrect guesses). I also consider an alternative optimization which is my preferred, of actual survival time (with two lives) rather than the sum of log likelihoods. 
 

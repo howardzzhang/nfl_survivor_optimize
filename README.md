@@ -36,14 +36,17 @@ $$\sum_{w=1}^{W} \sum_{t} x_{w,t}^* \log p_{w,w,t}$$
 In contrast to the optimization problem that is solved each week, the updated probabilities are used in the computation of the log likelihood. Based on this definition, the optimal strategy (if one knew the full set of $p_{w,w,t}$) would be to run a 17 look forward period at week 1.
 
 #### Outcome 2: Expected Survival Time #### 
-The expected survival time  is computed by simulation and is defined as
-$$\mathbb{E} \sum_{t: \sum_{w,t}  x_{w,t}^* O_{w,t,s} \leq 2} \sum_w x_{w,t}^* O_{w,t,s}$$ 
-where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in simulation $s$. These are generated based on 538 updated probabilities $p_{w,w,t}$.
+The expected survival time is computed by simulation and is defined as
+$$\mathbb{E} \sum_{t}^{T_s}  \sum_w x_{w,t}^* O_{w,t,s}$$ 
+where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in simulation $s$ generated based on 538 updated probabilities $p_{w,w,t}$ and the expectations are taken over simulations $s$. $T_s$ is defined as
+$$\max_{T_s} \sum_t^{T_s} \sum_{w} x_{w,t}^* (1- O_{w,t,s}) \leq 2$$ 
 
 #### Outcome 3: Actual Survival Time #### 
 The actual realized survival time is defined as
-$$\sum_{t: \sum_{w,t}  x_{w,t}^* O_{w,t} \leq 2} \sum_w x_{w,t}^* O_{w,t}$$ 
-where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in reality.
+$$\sum_{t}^{T} \sum_w x_{w,t}^* O_{w,t}$$ 
+where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in reality. Similar to above, $T$ 
+$$\max_{T} \sum_t^T \sum_{w} x_{w,t}^* (1- O_{w,t,}) \leq 2$$ 
+
 
 #### Results: ####
 Consistent with Bergman and Imbrogno (2017), I find that a 8 week look forward algorithm performs best in terms of log-likelihood. 

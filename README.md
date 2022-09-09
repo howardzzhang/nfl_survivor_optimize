@@ -43,7 +43,7 @@ $$\max_{T_s} \sum_t^{T_s} \sum_{w} x_{w,t}^* (1- O_{w,t,s}) \leq 2$$
 The actual realized survival time is defined as
 $$\sum_{t}^{T} \sum_w x_{w,t}^* O_{w,t}$$ 
 where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in reality. Similar to above, $T$ 
-$$\max_{T} \sum_t^T \sum_{w} x_{w,t}^* (1- O_{w,t,}) \leq 2$$ 
+$$\max_{T} \sum_t^T \sum_{w} x_{w,t}^* (1- O_{w,t}) \leq 2$$ 
 
 
 #### Results: ####

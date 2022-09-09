@@ -9,12 +9,12 @@ Reference: Bergman and Imbrogno (2017), https://pubsonline.informs.org/doi/10.12
 ### nfl_pred_2022.jl
 For current season, set current_week, forward_length, and history_of_picks to generate an optimal choice of teams in the next forward_length weeks. The code automatically retrieves the schedule.
 
-Consider the problem of picking a sequence of picks given our best guess of each team's schedule and win probability. One key input will be how long our look forward window should be. This window entails a tradeoff: although we will _better_ optimize given a longer window in terms of probability of surviving conditional on our conjected win probabilities, there are two weaknesses. First, over time more information will be revealed so that our conjected win probabilities will be far from reality. Second, NFL games are random and there are upsets. Optimizing too far into the future entails potentially sacrificing win chances today. This sacrifice will be for naught if our team pick loses.
+Consider the problem of picking a sequence of picks given our best guess of each team's schedule and win probability. One key input will be the length of our look forward window. This window entails a tradeoff: although we will _better_ optimize with a longer window, increasing our predicted probability of surviving, there are two key weaknesses. First, over time more information will be revealed so that our conjected win probabilities may be far from reality. Second, NFL games are random and there are upsets. Optimizing too far into the future entails potentially sacrificing win chances today. This sacrifice will be for naught if our team pick loses today.
 
 Let $x_{w,t}$ denote a binary variable for whether team $t$ is picked in week $w$. The optimization problem is to start in current week $w'$ and look forward $L$ periods (corresponding to forward_length)
 $$\max_{x_{w,t} \in \{0,1\}} \sum_{w=w'}^{w'+L-1} \sum_{t \in T_{w'}} x_{w,t} \log p_{w',w,t} $$
 $$\text{subject to} \quad \sum_{w} x_{w,t} \leq 1, \forall t \in T_{w'}, \quad  \sum_{t} x_{w,t} = ,  \forall w \in w',...,w'+L-1$$
-where $T_{w'}$ denotes the set of remaining/unpicked teams and $p_{w',w,t}$ denotes the predicted win chance of team $t$ in week $w$ with information at current week $w'$. $p_{w',w,t}$ is obtained from 538 ELO predictions. Notice that $p_{w,w,t}$ is unobserved at time $w'$ for $w' < w$. This optimization problem is easily solved using any IP solver.
+where $T_{w'}$ denotes the set of remaining/unpicked teams and $p_{w',w,t}$ denotes the predicted win chance of team $t$ in week $w$ with information at current week $w'$. $p_{w',w,t}$ is obtained from 538 elo predictions. Notice that $p_{w,w,t}$ is unobserved at time $w'$ for $w' < w$. This optimization problem is easily solved using any IP solver.
 
 $L=1$ corresponds to a greedy algorithm where the team with the highest win probability for the current week is picked. The history_of_picks variable should be a list of strings that correspond to the team names used in the 538 CSV file.
 
@@ -27,11 +27,23 @@ How do we determine the optimal look forward periods $L$? Using historical data 
 
 However, not the entire log likelihood will matter if we do not survive until the end. In terms of expected survival time, I find that a 6 week look forward is the best. What about actual realized survival times? Interestingly, most of the strategies behave worse than a greedy algorithm! A 9-period algorithm produces a similar realized survival time as a greedy algorithm. Is this a result of bad luck (with some early season upsets), or an issue with ELO at the beginning of the season?
 
-Each week, I run a $L$ period look forward optimization problem (defined above). I then extract the optimal team for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. The probabilities that enter the optimization problem are formed based only on the elo available before the start of the current week.
+#### Approach: ####
+Each week, I run a $L$ period look forward optimization problem (defined above). I  extract the pick for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. The probabilities that enter the optimization problem are formed based only on the elo available before the start of the current week.
 
 The log likelihood of a strategy is defined as
 $$\sum_{w=1}^{W} \sum_{t} x_{w,t}^* \log p_{w,w,t}$$ 
-In contrast to the optimization problem that is solved each week, the updated probabilities are used in the computation of the log likelihood. Based on this definition, the optimal strategy (if one knew the full set of $p_{w,w,t}$) would be to run a 17 look forward period at week 1. Consistent with Bergman and Imbrogno (2017), I find that a 8 week look forward algorithm performs best in terms of log-likelihood. 
+In contrast to the optimization problem that is solved each week, the updated probabilities are used in the computation of the log likelihood. Based on this definition, the optimal strategy (if one knew the full set of $p_{w,w,t}$) would be to run a 17 look forward period at week 1.
+
+The expected survival time  is computed by simulation and is defined as
+$$\mathbb{E} \sum_{t: \sum_{w,t}  x_{w,t}^* O_{w,t,s} \leq 2} \sum_w x_{w,t}^* O_{w,t,s}$$ 
+where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in simulation $s$. These are generated based on 538 updated probabilities $p_{w,w,t}$.
+
+The actual realized survival time is defined as
+$$\sum_{t: \sum_{w,t}  x_{w,t}^* O_{w,t} \leq 2} \sum_w x_{w,t}^* O_{w,t}$$ 
+where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$.
+
+#### Results: ####
+Consistent with Bergman and Imbrogno (2017), I find that a 8 week look forward algorithm performs best in terms of log-likelihood. 
 
 ![constant_lookforward_loglikelihood](https://user-images.githubusercontent.com/57815640/189217027-1c3f2fb9-6dbd-4c26-a0fd-8513fd1d6186.png)
 

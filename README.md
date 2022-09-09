@@ -6,6 +6,8 @@ Use elo data from 538 and optimization to figure out how to win! A NFL survivor 
 
 Reference: Bergman and Imbrogno (2017), https://pubsonline.informs.org/doi/10.1287/opre.2017.1633
 
+Note: All results apply to a two-life league.
+
 ### nfl_pred_2022.jl
 Consider the problem of picking a sequence of picks given our best guess of each team's schedule and win probability. One key input will be the length of our look forward window. This window entails a tradeoff: although we will _better_ optimize with a longer window, increasing our predicted probability of surviving, there are two key weaknesses. First, over time more information will be revealed so that our conjectured win probabilities may be far from reality. Second, NFL games are random and there are upsets. Optimizing too far into the future potentially sacrifices win chances today. This sacrifice will be for naught if our pick loses today.
 
@@ -60,7 +62,7 @@ What about actual survival time? The optimal 9 period look forward period produc
 ![constant_lookforward_survivalperiod](https://user-images.githubusercontent.com/57815640/189229633-01012861-b658-4510-9ea0-50ab55a830cc.png)
 
 ### Week-specific $L$
-How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, for $w'=1,..,W-1$ (notice that if you survive until the last week $W$, the only available look forward period is 1 so we only need to choose the look forward window for $W-1$ weeks). The improvement looks to be decent for realized (11.2 over 9.8 weeks for realized) but small for expected survival (9.1 to 9.2).
+How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, for $w'=1,..,W-1$ (notice that if you survive until the last week $W$, the only available look forward period is 1 so we only need to choose the look forward window for $W-1$ weeks). The improvement looks to be decent for realized (9.8 weeks to 11.2 weeks for realized) but small for expected survival (9.1 weeks to 9.2 weeks).
 
 Packages used: Evolutionary.jl, JuMP with HiGHS
 

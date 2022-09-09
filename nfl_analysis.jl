@@ -137,11 +137,11 @@ function Evolutionary.trace!(record::Dict{String,Any}, objfun, state, population
    end
 end
 
-function ga_optimize(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams)
+function ga_optimize(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams,type)
    #now use GA to optimize
    #notice that in the last week, can only have a maximum look-forward of 1, optimize over 16 weeks
    npop=160;
-   compute_performance_anonymous(look_forward) = compute_performance(look_forward,win_matrix_all_seasons,win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams,1);
+   compute_performance_anonymous(look_forward) = compute_performance(look_forward,win_matrix_all_seasons,win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams,type);
    upper = reverse(collect(2:17));
    lower = ones(Int64,16);
    options =
@@ -167,11 +167,12 @@ end
 function compute_performance(look_forward,win_matrix_all_seasons,win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams,typereturn)
    survival = zeros(nseasons);
    log_likelihood = zeros(nseasons);
+   exp_survival = zeros(nseasons);
    for season in 1:nseasons
       win_matrix_all = win_matrix_all_seasons[season];
       win_outcomes_matrix = win_outcomes_matrix_seasons[season];
       nweeks = Int64(nweeks_seasons[season]);
-      if typereturn == 2
+      if typereturn >= 2
          win_matrix_act = win_matrix_act_seasons[season];
       end
       sol = zeros(nteams,nweeks);
@@ -202,16 +203,51 @@ function compute_performance(look_forward,win_matrix_all_seasons,win_outcomes_ma
          end
       elseif typereturn == 2
          log_likelihood[season] = sum(sol.*win_matrix_act);
+      elseif typereturn == 3
+         nsimul = 10000;
+         survive_simul = zeros(nsimul);
+         temp_sol = sol.*win_matrix_act;
+         temp_sol[temp_sol.==0] .= -Inf
+         expected_p = sum(exp.(temp_sol),dims=1)';
+         for simul = 1:nsimul
+            outcome = rand(nweeks)
+            result = vec(Int64.(expected_p.>=outcome));
+            if isnothing(findfirst(result.==0))
+               terminal = nweeks
+            elseif isnothing(findnext(result.==0,findfirst(result.==0)+1))
+               terminal = nweeks
+            else
+               terminal = findnext(result.==0,findfirst(result.==0)+1)
+            end
+            survive_simul[simul] = terminal;
+         end
+         exp_survival[season] = mean(survive_simul);
       end
    end
    if typereturn == 1
       return 1 ./ mean(survival)
    elseif typereturn == 2
       return -mean(log_likelihood)
+   elseif typereturn == 3
+      return 1 ./ mean(exp_survival)
    end
 end
 
-sol = ga_optimize(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams);
+sol = ga_optimize(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams,1);
+solution_array = zeros(length(sol_min))
+for p = 1:length(sol_min)
+   solution_array[p] = sol_min[p][];
+end 
+plot(1:16,solution_array, title = "Optimal Look Forward Period: Realized", xlabel="Week")
+savefig("optimal_realized.png")
+
+sol = ga_optimize(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams,3);
+solution_array = zeros(length(sol_min))
+for p = 1:length(sol_min)
+   solution_array[p] = sol_min[p][];
+end 
+plot(1:16,solution_array, title = "Optimal Look Forward Period: Expected", xlabel="Week")
+savefig("optimal_expected.png")
 
 function single_length(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_matrix_act_seasons,nseasons,nweeks_seasons,nteams)
    survival = zeros(nseasons,17);
@@ -256,7 +292,7 @@ function single_length(win_matrix_all_seasons, win_outcomes_matrix_seasons,win_m
             end
             survive_simul[simul] = terminal;
          end
-         exp_survival[nseasons,potential_length] = mean(survive_simul);
+         exp_survival[season,potential_length] = mean(survive_simul);
 
          temp = vec(transpose(sum(sol .* win_outcomes_matrix,dims=1)));
          if isnothing(findfirst(temp.==0))

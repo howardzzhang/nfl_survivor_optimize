@@ -36,7 +36,7 @@ In contrast to the optimization problem that is solved each week, the updated pr
 #### Outcome 2: Expected Survival Time #### 
 The expected survival time is computed by simulation and is defined as
 $$\mathbb{E} \sum_{t}^{T_s}  \sum_w x_{w,t}^* O_{w,t,s}$$ 
-where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in simulation $s$ generated based on 538 updated probabilities $p_{w,w,t}$ and the expectations are taken over simulations $s$. $T_s$ is defined as
+where $O_{w,t,s}$ is an indicator variable for whether team $t$ won in week $w$ in simulation $s$. These outcomes are generated based on 538 updated probabilities $p_{w,w,t}$ and the expectations are taken over simulations $s$. $T_s$ is defined as
 $$\max_{T_s} \sum_t^{T_s} \sum_{w} x_{w,t}^* (1- O_{w,t,s}) \leq 2$$ 
 
 #### Outcome 3: Actual Survival Time #### 

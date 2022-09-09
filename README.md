@@ -31,7 +31,7 @@ In contrast to the optimization problem that is solved each week, the updated pr
 
 ![constant_lookforward_loglikelihood](https://user-images.githubusercontent.com/57815640/189217027-1c3f2fb9-6dbd-4c26-a0fd-8513fd1d6186.png)
 
-One does not care about the likelihoods after two deaths (i.e., incorrect guesses). I consider an alternative optimization of the expected survival time. I find an optimal look-forward period of 4.
+One does not care about the likelihoods after two deaths (i.e., incorrect guesses). I consider an alternative optimization of the expected survival time. I find an optimal look-forward period of 6.
 
 ![constant_lookforward_expectedsurvivalperiod](https://user-images.githubusercontent.com/57815640/189270574-10d57818-e69e-4b34-b90c-f772888e15f1.png)
 

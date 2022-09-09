@@ -67,8 +67,6 @@ How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, 
 Packages used: Evolutionary.jl, JuMP with HiGHS
 
 ### Discussion
-Predictions are only as good as ELO system; lots of underlying parameters that I rely on based on 538, including their update rate, home field advantage, and quarterback adjustment
+Predictions are only as good as the underlying probabilities based on 538's elo system; key parameters include their update rate, home field advantage, and quarterback adjustment
 
-Are predicted win probabilities $p_{w',w,t}$ correct? One would probably want to simulate the games and subsequent elo updates. It is unclear how 1) to generate score differences that matter for elo updates, 2) include these simulations in a optimization problem (e.g., would one take the average of $p_{w',w,t}$ over all simulations?)
-
-
+Are predicted win probabilities $p_{w',w,t}$ computed on current elos correct? One would probably want to simulate the games and subsequent elo updates. It is unclear how 1) to generate score differences that matter for elo updates, 2) include these simulations in a optimization problem (e.g., would one take the average of $p_{w',w,t}$ over all simulations?)

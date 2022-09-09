@@ -19,7 +19,7 @@ For current season, set current_week, forward_length, and history_of_picks to ge
 Packages used: JuMP with HiGHS
 
 ### nfl_analysis.jl
-**Suggested contant look forward period: 6**
+**Suggested look forward period: 6**
 
 How do we determine the optimal look forward periods $L$? Using historical data from 1990-2021 seasons (skipping 2020 Covid), I first consider a case where we choose a constant $L$ in each week. Similar to Bergman and Imbrogno (2017), I find that a 8 week look forward algorithm performs best in terms of log-likelihood. 
 

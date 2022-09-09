@@ -31,10 +31,9 @@ In contrast to the optimization problem that is solved each week, the updated pr
 
 One does not care about the likelihoods after two deaths (i.e., incorrect guesses). I consider an alternative optimization of the expected survival time. I find an optimal look-forward period of 4.
 
-![constant_lookforward_expectedsurvivalperiod](https://user-images.githubusercontent.com/57815640/189229683-0afb3418-e2fa-4532-877c-b57a7fd64039.png)
+![constant_lookforward_expectedsurvivalperiod](https://user-images.githubusercontent.com/57815640/189270574-10d57818-e69e-4b34-b90c-f772888e15f1.png)
 
-
-Finally, what about actual survival time? The optimal value of 9 produces a similar expected survival time as a greedy algorithm; while other strategies produce a lower realized survival time compared to a greedy algorithm!
+What about actual survival time? The optimal value of 9 produces a similar expected survival time as a greedy algorithm; while other strategies produce a lower realized survival time compared to a greedy algorithm!
 
 ![constant_lookforward_survivalperiod](https://user-images.githubusercontent.com/57815640/189229633-01012861-b658-4510-9ea0-50ab55a830cc.png)
 

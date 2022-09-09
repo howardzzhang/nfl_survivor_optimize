@@ -26,7 +26,7 @@ How do we determine the optimal look forward periods $L$? Using historical data 
 However, only partial terms of the log likelihood will matter if we do not survive until the end. In terms of expected survival time, I find that a 6 week look forward is the best. What about actual realized survival times? Interestingly, most of the strategies behave worse than a greedy algorithm! A 9-period algorithm produces a similar realized survival time as a greedy algorithm. Is this a result of bad luck (with some early season upsets), or an issue with ELO at the beginning of the season?
 
 #### Approach: ####
-Each week, I run a $L$ period look forward optimization problem (defined above). I  extract the pick for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. The probabilities that enter the optimization problem are formed based only on the elo available before the start of the current week.
+Each week, I run a $L$ period look forward optimization problem (defined above). I  extract the pick for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. The probabilities that enter the optimization problem are formed based only on the elo available before the start of the current week. A strategy is defined as $x_{w,t}^* $.
 
 #### Outcome 1: log Likelihood #### 
 The log likelihood of a strategy is defined as

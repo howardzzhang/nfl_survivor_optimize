@@ -12,7 +12,7 @@ Consider the problem of picking a sequence of picks given our best guess of each
 Let $x_{w,t}$ denote a binary variable for whether team $t$ is picked in week $w$. The optimization problem is to start in current week $w'$ and look forward $L$ periods (corresponding to forward_length)
 $$\max_{x_{w,t} \in \{0,1\}} \sum_{w=w'}^{w'+L-1} \sum_{t \in T_{w'}} x_{w,t} \log p_{w',w,t} $$
 $$\text{subject to} \quad \sum_{w} x_{w,t} \leq 1, \forall t \in T_{w'}, \quad  \sum_{t} x_{w,t} = ,  \forall w \in w',...,w'+L-1$$
-where $T_{w'}$ denotes the set of remaining/unpicked teams and $p_{w',w,t}$ denotes the predicted win chance of team $t$ in week $w$ with information at current week $w'$. Notice that $p_{w,w,t}$ is unobserved at time $w'$ for $w' < w$. This optimization problem is easily solved using any IP solver. $L=1$ corresponds to a greedy algorithm where the team with the highest win probability for the current week is picked. T
+where $T_{w'}$ denotes the set of remaining/unpicked teams and $p_{w',w,t}$ denotes the predicted win chance of team $t$ in week $w$ with information at current week $w'$. Notice that $p_{w,w,t}$ is unobserved at time $w'$ for $w' < w$. This optimization problem is easily solved using any IP solver. $L=1$ corresponds to a greedy algorithm where the team with the highest win probability for the current week is picked.
 
 How to use code: Set current_week, forward_length, and history_of_picks to generate an optimal choice of teams in the next forward_length weeks. The code automatically retrieves the schedule. The history_of_picks variable should be a list of strings that correspond to the team names used in the 538 CSV file.
 

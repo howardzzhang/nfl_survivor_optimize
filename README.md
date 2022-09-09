@@ -7,16 +7,14 @@ Use elo data from 538 and optimization to figure out how to win! A NFL survivor 
 Reference: Bergman and Imbrogno (2017), https://pubsonline.informs.org/doi/10.1287/opre.2017.1633
 
 ### nfl_pred_2022.jl
-For current season, set current_week, forward_length, and history_of_picks to generate an optimal choice of teams in the next forward_length weeks. The code automatically retrieves the schedule.
-
 Consider the problem of picking a sequence of picks given our best guess of each team's schedule and win probability. One key input will be the length of our look forward window. This window entails a tradeoff: although we will _better_ optimize with a longer window, increasing our predicted probability of surviving, there are two key weaknesses. First, over time more information will be revealed so that our conjected win probabilities may be far from reality. Second, NFL games are random and there are upsets. Optimizing too far into the future potentially sacrifices win chances today. This sacrifice will be for naught if our team pick loses today.
 
 Let $x_{w,t}$ denote a binary variable for whether team $t$ is picked in week $w$. The optimization problem is to start in current week $w'$ and look forward $L$ periods (corresponding to forward_length)
 $$\max_{x_{w,t} \in \{0,1\}} \sum_{w=w'}^{w'+L-1} \sum_{t \in T_{w'}} x_{w,t} \log p_{w',w,t} $$
 $$\text{subject to} \quad \sum_{w} x_{w,t} \leq 1, \forall t \in T_{w'}, \quad  \sum_{t} x_{w,t} = ,  \forall w \in w',...,w'+L-1$$
-where $T_{w'}$ denotes the set of remaining/unpicked teams and $p_{w',w,t}$ denotes the predicted win chance of team $t$ in week $w$ with information at current week $w'$. Notice that $p_{w,w,t}$ is unobserved at time $w'$ for $w' < w$. This optimization problem is easily solved using any IP solver.
+where $T_{w'}$ denotes the set of remaining/unpicked teams and $p_{w',w,t}$ denotes the predicted win chance of team $t$ in week $w$ with information at current week $w'$. Notice that $p_{w,w,t}$ is unobserved at time $w'$ for $w' < w$. This optimization problem is easily solved using any IP solver. $L=1$ corresponds to a greedy algorithm where the team with the highest win probability for the current week is picked. T
 
-$L=1$ corresponds to a greedy algorithm where the team with the highest win probability for the current week is picked. The history_of_picks variable should be a list of strings that correspond to the team names used in the 538 CSV file.
+For current season, set current_week, forward_length, and history_of_picks to generate an optimal choice of teams in the next forward_length weeks. The code automatically retrieves the schedule. The history_of_picks variable should be a list of strings that correspond to the team names used in the 538 CSV file.
 
 Packages used: JuMP with HiGHS
 

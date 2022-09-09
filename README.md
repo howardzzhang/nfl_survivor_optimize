@@ -30,17 +30,20 @@ However, not the entire log likelihood will matter if we do not survive until th
 #### Approach: ####
 Each week, I run a $L$ period look forward optimization problem (defined above). I  extract the pick for the current week only. In the subsequent week, I drop the team selected in the previous week from the pool of potential candidates, use updated elos, and then re-run the optimization problem with the same $L$ look forward period. The probabilities that enter the optimization problem are formed based only on the elo available before the start of the current week.
 
+#### Outcome 1: log Likelihood #### 
 The log likelihood of a strategy is defined as
 $$\sum_{w=1}^{W} \sum_{t} x_{w,t}^* \log p_{w,w,t}$$ 
 In contrast to the optimization problem that is solved each week, the updated probabilities are used in the computation of the log likelihood. Based on this definition, the optimal strategy (if one knew the full set of $p_{w,w,t}$) would be to run a 17 look forward period at week 1.
 
+#### Outcome 2: Expected Survival Time #### 
 The expected survival time  is computed by simulation and is defined as
 $$\mathbb{E} \sum_{t: \sum_{w,t}  x_{w,t}^* O_{w,t,s} \leq 2} \sum_w x_{w,t}^* O_{w,t,s}$$ 
 where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in simulation $s$. These are generated based on 538 updated probabilities $p_{w,w,t}$.
 
+#### Outcome 3: Actual Survival Time #### 
 The actual realized survival time is defined as
 $$\sum_{t: \sum_{w,t}  x_{w,t}^* O_{w,t} \leq 2} \sum_w x_{w,t}^* O_{w,t}$$ 
-where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$.
+where $O_{w,t}$ is an indicator variable for whether team $t$ won in week $w$ in reality.
 
 #### Results: ####
 Consistent with Bergman and Imbrogno (2017), I find that a 8 week look forward algorithm performs best in terms of log-likelihood. 

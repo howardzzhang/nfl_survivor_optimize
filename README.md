@@ -60,7 +60,7 @@ What about actual survival time? The optimal 9 period look forward period produc
 ![constant_lookforward_survivalperiod](https://user-images.githubusercontent.com/57815640/189229633-01012861-b658-4510-9ea0-50ab55a830cc.png)
 
 ### Week-specific $L$
-How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, for $w'=1,..,W-1$ (notice that if you survive until the last week $W$, the only available look forward period is 1 so we only need to choose the look forward window for $W-1$ weeks). The improvement looks to be decent for realized (11.2 over 9.8 weeks for realized ) but small for expected (9.1 to 9.2).
+How about a week-specific $L$? I use a genetic algorithm to determine $L_{w'}$, for $w'=1,..,W-1$ (notice that if you survive until the last week $W$, the only available look forward period is 1 so we only need to choose the look forward window for $W-1$ weeks). The improvement looks to be decent for realized (11.2 over 9.8 weeks for realized) but small for expected survival (9.1 to 9.2).
 
 Packages used: Evolutionary.jl, JuMP with HiGHS
 

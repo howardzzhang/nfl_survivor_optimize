@@ -9,7 +9,7 @@ Reference: Bergman and Imbrogno (2017), https://pubsonline.informs.org/doi/10.12
 Note: All results apply to a two-life league.
 
 ### nfl_pred_2022.jl
-Consider the problem of picking a sequence of picks given our best guess of each team's schedule and win probability. One key input will be the length of our look forward window. This window entails a tradeoff: although we will _better_ optimize with a longer window, increasing our predicted probability of surviving, there are two key weaknesses. First, over time more information will be revealed so that our conjectured win probabilities may be far from reality. Second, NFL games are random and there are upsets. Optimizing too far into the future potentially sacrifices win chances today. This sacrifice will be for naught if our pick loses today.
+Consider the problem of picking a sequence of picks given each team's schedule and our best guess of future win probabilities. One key input will be the length of our look forward window. This window entails a tradeoff: although we will _better_ optimize with a longer window, increasing our predicted probability of surviving, there are two key weaknesses. First, over time more information will be revealed so that our conjectured win probabilities may be far from reality. Second, NFL games are random and there are upsets. Optimizing too far into the future potentially sacrifices win chances today. This sacrifice will be for naught if our pick loses today.
 
 Let $x_{w,t}$ denote a binary variable for whether team $t$ is picked in week $w$. The optimization problem is to start in current week $w'$ and look forward $L$ periods (corresponding to forward_length)
 $$\max_{x_{w,t} \in \{0,1\}} \sum_{w=w'}^{w'+L-1} \sum_{t \in T_{w'}} x_{w,t} \log p_{w',w,t} $$
